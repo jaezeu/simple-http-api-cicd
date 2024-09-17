@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 from app import lambda_handler  # Adjust import based on your file structure
 
 @mock_aws
-def test_lambda_handler_with_payload(setup_environment):
+def test_lambda_handler_with_payload():
     # Set up mock DynamoDB
     dynamodb = boto3.client('dynamodb', region_name='ap-southeast-1', aws_access_key_id="ak", aws_secret_access_key="sk",)
     dynamodb.create_table(

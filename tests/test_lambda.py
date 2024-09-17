@@ -10,6 +10,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 
 from app import lambda_handler  # Adjust import based on your file structure
 
+os.environ["AWS_ACCESS_KEY_ID"] = "test"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "test"
+
 @pytest.fixture
 def setup_environment():
     os.environ['DDB_TABLE'] = 'test-table'

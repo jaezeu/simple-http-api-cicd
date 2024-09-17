@@ -12,18 +12,18 @@ from app import lambda_handler  # Adjust import based on your file structure
 
 @mock_aws
 def test_lambda_handler_with_payload():
+    name = "TestTable"
+    dynamodb = boto3.client(
+        "dynamodb",
+        region_name="ap-southeast-1",
+        aws_access_key_id="ak",
+        aws_secret_access_key="sk",
+    )
     # Set up mock DynamoDB
-    dynamodb = boto3.client('dynamodb', region_name='ap-southeast-1', aws_access_key_id="ak", aws_secret_access_key="sk",)
     dynamodb.create_table(
-        TableName='test-table',
-        KeySchema=[
-            {'AttributeName': 'year', 'KeyType': 'HASH'},
-            {'AttributeName': 'title', 'KeyType': 'RANGE'}
-        ],
-        AttributeDefinitions=[
-            {'AttributeName': 'year', 'AttributeType': 'N'},
-            {'AttributeName': 'title', 'AttributeType': 'S'}
-        ],
+        TableName=name,
+        KeySchema=[{'AttributeName': 'year', 'KeyType': 'HASH'},{'AttributeName': 'title', 'KeyType': 'RANGE'}],
+        AttributeDefinitions=[{'AttributeName': 'year', 'AttributeType': 'N'},{'AttributeName': 'title', 'AttributeType': 'S'}],
         ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
     )
 

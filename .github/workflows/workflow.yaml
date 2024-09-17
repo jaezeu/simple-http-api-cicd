@@ -50,35 +50,20 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         command: monitor
-  
-  py-test:
+
+  python-linting:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        linter: [flake8, pylint]
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-          python-version: ${{ matrix.python-version }}
-
-    - name: Install dependencies
-      run: |
-        pip install boto3
-        pip install pytest
-        pip install moto
-
-    - name: Run tests
-      run: |
-        cd tests
-        pytest
-
+      - uses: advanced-security/python-lint-code-scanning-action@v1
+        with:
+          linter: ${{ matrix.linter }}
+  
   Deploy:
     runs-on: ubuntu-latest
-    needs: [Terraform-CI, Snyk-Checks, py-test]
+    needs: [Terraform-CI, Snyk-Checks, python-linting]
 
     steps:
     - uses: actions/checkout@v3

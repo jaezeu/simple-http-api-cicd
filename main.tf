@@ -1,9 +1,9 @@
 locals {
-  name_prefix = "jaz"
+  name_prefix = "jaz-httpapi"
 }
 
 resource "aws_dynamodb_table" "table" {
-  name         = "${local.name_prefix}-httpapi-ddb"
+  name         = "${local.name_prefix}-ddb"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "year"
   range_key    = "title"
@@ -25,7 +25,7 @@ resource "aws_dynamodb_table" "table" {
 #========================================================================
 
 data "archive_file" "lambda_zip" {
-  type = "zip"
+  type        = "zip"
   source_dir  = "${path.module}/src"
   output_path = "${path.module}/src.zip"
 }
@@ -33,7 +33,7 @@ data "archive_file" "lambda_zip" {
 //Define lambda function
 resource "aws_lambda_function" "http_api_lambda" {
   filename         = data.archive_file.lambda_zip.output_path
-  function_name    = "${local.name_prefix}-httpapi-lambda"
+  function_name    = "${local.name_prefix}-lambda"
   description      = "Lambda function to write to dynamodb"
   runtime          = "python3.8"
   handler          = "app.lambda_handler"
@@ -48,7 +48,7 @@ resource "aws_lambda_function" "http_api_lambda" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "${local.name_prefix}-httpapi-LambdaDdbPostRole"
+  name = "${local.name_prefix}-LambdaDdbPostRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -65,7 +65,7 @@ resource "aws_iam_role" "lambda_exec" {
 }
 
 resource "aws_iam_policy" "lambda_exec_role" {
-  name = "${local.name_prefix}-httpapi-LambdaDdbPostPolicy"
+  name = "${local.name_prefix}-LambdaDdbPostPolicy"
 
   policy = <<POLICY
 {
@@ -104,7 +104,7 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
 #========================================================================
 
 resource "aws_apigatewayv2_api" "http_api" {
-  name          = "${local.name_prefix}-http-api"
+  name          = local.name_prefix
   protocol_type = "HTTP"
 }
 

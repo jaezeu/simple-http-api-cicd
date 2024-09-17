@@ -12,6 +12,7 @@ from app import lambda_handler  # Adjust import based on your file structure
 
 @mock_aws
 def test_lambda_handler_with_payload():
+    os.environ['DDB_TABLE'] = 'fake-table'
     name = "TestTable"
     dynamodb = boto3.client(
         "dynamodb",

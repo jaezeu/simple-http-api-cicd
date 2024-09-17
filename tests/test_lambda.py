@@ -2,7 +2,11 @@ import json
 import os
 import pytest
 from unittest.mock import patch
-from src.app import lambda_handler
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+
+from app import lambda_handler  # Adjusted import statement
 
 @pytest.fixture
 def setup_environment():

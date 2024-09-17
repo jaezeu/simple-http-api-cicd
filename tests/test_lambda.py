@@ -10,14 +10,18 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 
 from app import lambda_handler  # Adjust import based on your file structure
 
-os.environ["AWS_ACCESS_KEY_ID"] = "test"
-os.environ["AWS_SECRET_ACCESS_KEY"] = "test"
-
 @pytest.fixture
 def setup_environment():
+    os.environ['AWS_ACCESS_KEY_ID'] = 'fake-access-key'
+    os.environ['AWS_SECRET_ACCESS_KEY'] = 'fake-secret-key'
+    os.environ['AWS_SESSION_TOKEN'] = 'fake-session-token'
+
     os.environ['DDB_TABLE'] = 'test-table'
     yield
     del os.environ['DDB_TABLE']
+    del os.environ['AWS_ACCESS_KEY_ID']
+    del os.environ['AWS_SECRET_ACCESS_KEY']
+    del os.environ['AWS_SESSION_TOKEN']
 
 @mock_aws
 def test_lambda_handler_with_payload(setup_environment):

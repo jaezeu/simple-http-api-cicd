@@ -1,5 +1,7 @@
+data "aws_caller_identity" "current" {}
+
 locals {
-  name_prefix = "jaz-httpapi"
+  name_prefix = "${split("/","${data.aws_caller_identity.current.arn}")[1]}-httpapi"
 }
 
 resource "aws_dynamodb_table" "table" {

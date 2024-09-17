@@ -10,11 +10,14 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 
 from app import lambda_handler  # Adjust import based on your file structure
 
-def setup_environment(self):
-    pass
+@pytest.fixture
+def setup_environment():
+    os.environ['DDB_TABLE'] = 'test-table'
+    yield
+    del os.environ['DDB_TABLE']
 
 @mock_aws
-def test_lambda_handler_with_payload(self):
+def test_lambda_handler_with_payload(setup_environment):
     # Set up mock DynamoDB
     dynamodb = boto3.client('dynamodb', region_name='ap-southeast-1')
     dynamodb.create_table(
@@ -53,7 +56,7 @@ def test_lambda_handler_with_payload(self):
     }
 
 @mock_aws
-def test_lambda_handler_without_payload(self):
+def test_lambda_handler_without_payload(setup_environment):
     # Set up mock DynamoDB
     dynamodb = boto3.client('dynamodb', region_name='ap-southeast-1')
     dynamodb.create_table(

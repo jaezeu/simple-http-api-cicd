@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-dynamodb_client = boto3.client('dynamodb')
+dynamodb_client = boto3.client('dynamodb', region_name='ap-southeast-1')
 
 def lambda_handler(event, context):
   table = os.environ.get('DDB_TABLE')

@@ -48,6 +48,8 @@ jobs:
       continue-on-error: true
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        command: monitor
   
   py-test:
     runs-on: ubuntu-latest

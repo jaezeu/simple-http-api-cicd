@@ -41,6 +41,9 @@ resource "aws_lambda_function" "http_api_lambda" {
   handler          = "app.lambda_handler"
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   role             = aws_iam_role.lambda_exec.arn
+  tracing_config {
+    mode = "Active"
+  }
 
   environment {
     variables = {
@@ -88,6 +91,14 @@ resource "aws_iam_policy" "lambda_exec_role" {
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords"
             ],
             "Resource": "*"
         }

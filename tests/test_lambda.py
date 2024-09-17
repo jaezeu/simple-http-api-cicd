@@ -4,11 +4,12 @@ import pytest
 import boto3
 import sys
 from unittest.mock import patch
-from moto import mock_dynamodb2
+from moto import mock_dynamodb  # Use mock_dynamodb instead of mock_dynamodb2
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from app import lambda_handler  # Adjust import based on your file structure
+
 
 @pytest.fixture
 def setup_environment():
@@ -17,7 +18,7 @@ def setup_environment():
     yield
     del os.environ['DDB_TABLE']
 
-@mock_dynamodb2
+@mock_dynamodb
 def test_lambda_handler_with_payload(setup_environment):
     # Set up mock DynamoDB
     dynamodb = boto3.client('dynamodb', region_name='us-west-2')
@@ -56,7 +57,7 @@ def test_lambda_handler_with_payload(setup_environment):
         'title': {'S': 'The New Era'}
     }
 
-@mock_dynamodb2
+@mock_dynamodb
 def test_lambda_handler_without_payload(setup_environment):
     # Set up mock DynamoDB
     dynamodb = boto3.client('dynamodb', region_name='us-west-2')

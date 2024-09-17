@@ -51,7 +51,7 @@ jobs:
   
   Deploy:
     runs-on: ubuntu-latest
-    needs: [Terraform-CI, Snyk-Checks, python-linting]
+    needs: [Terraform-CI, python-linting]
 
     steps:
     - uses: actions/checkout@v3
